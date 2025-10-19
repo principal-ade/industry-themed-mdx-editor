@@ -1,0 +1,105 @@
+<Meta title="Introduction" />
+
+# Industry-Themed MDX Editor
+
+Welcome to the **Industry-Themed MDX Editor** Storybook!
+
+This package provides a beautifully themed MDX editor that seamlessly integrates with the `@a24z/industry-theme` system.
+
+## Features
+
+- 🎨 **Automatic Theme Sync**: Integrates with industry-theme for consistent styling
+- 💾 **Built-in Save**: Ctrl/Cmd+S support with dirty state tracking
+- 📝 **Full MDX Support**: All standard MDXEditor plugins work seamlessly
+- 🔧 **Customizable**: Easy theming via CSS custom properties
+- 📊 **Status Bar**: Optional file path and save state indicators
+- 🎯 **Type-Safe**: Full TypeScript support
+
+## Components
+
+### ThemedMDXEditor
+
+The main component that requires an explicit `theme` prop.
+
+```tsx
+import { ThemedMDXEditor } from '@principal-ade/industry-themed-mdx-editor';
+import { useTheme } from '@a24z/industry-theme';
+
+function MyEditor() {
+  const { theme } = useTheme();
+
+  return (
+    <ThemedMDXEditor
+      theme={theme}
+      initialValue="# Hello World"
+      plugins={[...]}
+    />
+  );
+}
+```
+
+### ThemedMDXEditorWithProvider
+
+Automatically uses the theme from context (requires `ThemeProvider`).
+
+```tsx
+import { ThemedMDXEditorWithProvider } from '@principal-ade/industry-themed-mdx-editor';
+import { ThemeProvider } from '@a24z/industry-theme';
+
+function App() {
+  return (
+    <ThemeProvider>
+      <ThemedMDXEditorWithProvider
+        initialValue="# Hello World"
+        plugins={[...]}
+      />
+    </ThemeProvider>
+  );
+}
+```
+
+## Installation
+
+```bash
+npm install @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @a24z/industry-theme
+```
+
+## CSS Imports
+
+Don't forget to import the required CSS:
+
+```tsx
+import '@mdxeditor/editor/style.css';
+import '@principal-ade/industry-themed-mdx-editor/styles.css';
+```
+
+## Examples
+
+Browse the stories to see various configurations and use cases:
+
+- **Default**: Basic editor with all plugins
+- **With Save**: Editor with save functionality
+- **Read Only**: Read-only mode
+- **Minimal Plugins**: Simplified editor
+- **Code Focused**: Examples with syntax highlighting
+- And more!
+
+## CSS Custom Properties
+
+The editor uses CSS custom properties for theming:
+
+- `--mdx-editor-bg`: Background color
+- `--mdx-editor-fg`: Text color
+- `--mdx-editor-border`: Border color
+- `--mdx-editor-toolbar-bg`: Toolbar background
+- `--mdx-editor-font-family`: Font family
+- `--mdx-editor-font-size`: Font size
+- `--mdx-editor-code-bg`: Code block background
+- `--mdx-editor-selection-bg`: Selection background
+- `--mdx-editor-link-color`: Link color
+- `--mdx-editor-heading-color`: Heading color
+
+## Learn More
+
+- [MDXEditor Documentation](https://mdxeditor.dev/)
+- [Industry Theme Documentation](https://github.com/a24z-ai/industry-theme)
