@@ -27,6 +27,7 @@ import {
   DiffSourceToggleWrapper,
 } from '@mdxeditor/editor';
 import React from 'react';
+import { useThemedMDXEditor } from '../src/hooks/useThemedMDXEditor';
 
 const sampleMarkdown = `# Welcome to Industry-Themed MDX Editor
 
@@ -83,63 +84,83 @@ function MyEditor() {
 Try editing this content and use **Ctrl/Cmd+S** to save!
 `;
 
-const defaultPlugins = [
-  headingsPlugin(),
-  listsPlugin(),
-  quotePlugin(),
-  thematicBreakPlugin(),
-  markdownShortcutPlugin(),
-  linkPlugin(),
-  linkDialogPlugin(),
-  imagePlugin({
-    imageUploadHandler: async () => 'https://via.placeholder.com/400x300',
-  }),
-  tablePlugin(),
-  codeBlockPlugin({ defaultCodeBlockLanguage: 'javascript' }),
-  codeMirrorPlugin({
-    codeBlockLanguages: {
-      javascript: 'JavaScript',
-      typescript: 'TypeScript',
-      python: 'Python',
-      java: 'Java',
-      go: 'Go',
-      rust: 'Rust',
-      cpp: 'C++',
-      c: 'C',
-      css: 'CSS',
-      html: 'HTML',
-      json: 'JSON',
-      yaml: 'YAML',
-      markdown: 'Markdown',
-      bash: 'Bash',
-      shell: 'Shell',
-      sql: 'SQL',
-    },
-  }),
-  frontmatterPlugin(),
-  diffSourcePlugin({ viewMode: 'rich-text' }),
-  toolbarPlugin({
-    toolbarContents: () => (
-      <>
-        <DiffSourceToggleWrapper>
-          <UndoRedo />
-          <BlockTypeSelect />
-          <BoldItalicUnderlineToggles />
-          <CodeToggle />
-          <CreateLink />
-          <InsertImage />
-          <InsertTable />
-          <InsertThematicBreak />
-          <ListsToggle />
-        </DiffSourceToggleWrapper>
-      </>
-    ),
-  }),
-];
+/**
+ * Helper component to create themed plugins
+ * Uses the hook to get CodeMirror extensions
+ */
+function useDefaultPlugins() {
+  const { getCodeMirrorExtensions } = useThemedMDXEditor();
+
+  return React.useMemo(
+    () => [
+      headingsPlugin(),
+      listsPlugin(),
+      quotePlugin(),
+      thematicBreakPlugin(),
+      markdownShortcutPlugin(),
+      linkPlugin(),
+      linkDialogPlugin(),
+      imagePlugin({
+        imageUploadHandler: async () => 'https://via.placeholder.com/400x300',
+      }),
+      tablePlugin(),
+      codeBlockPlugin({ defaultCodeBlockLanguage: 'javascript' }),
+      codeMirrorPlugin({
+        codeBlockLanguages: {
+          javascript: 'JavaScript',
+          typescript: 'TypeScript',
+          python: 'Python',
+          java: 'Java',
+          go: 'Go',
+          rust: 'Rust',
+          cpp: 'C++',
+          c: 'C',
+          css: 'CSS',
+          html: 'HTML',
+          json: 'JSON',
+          yaml: 'YAML',
+          markdown: 'Markdown',
+          bash: 'Bash',
+          shell: 'Shell',
+          sql: 'SQL',
+        },
+        codeMirrorExtensions: getCodeMirrorExtensions(),
+      }),
+      frontmatterPlugin(),
+      diffSourcePlugin({ viewMode: 'rich-text' }),
+      toolbarPlugin({
+        toolbarContents: () => (
+          <>
+            <DiffSourceToggleWrapper>
+              <UndoRedo />
+              <BlockTypeSelect />
+              <BoldItalicUnderlineToggles />
+              <CodeToggle />
+              <CreateLink />
+              <InsertImage />
+              <InsertTable />
+              <InsertThematicBreak />
+              <ListsToggle />
+            </DiffSourceToggleWrapper>
+          </>
+        ),
+      }),
+    ],
+    [getCodeMirrorExtensions]
+  );
+}
+
+/**
+ * Wrapper component to provide themed plugins to stories
+ */
+function ThemedEditor(props: React.ComponentProps<typeof ThemedMDXEditorWithProvider>) {
+  const plugins = useDefaultPlugins();
+  return <ThemedMDXEditorWithProvider {...props} plugins={props.plugins || plugins} />;
+}
 
 const meta = {
   title: 'Components/ThemedMDXEditor',
-  component: ThemedMDXEditorWithProvider,
+  component: ThemedEditor,
   parameters: {
     layout: 'fullscreen',
   },
@@ -158,7 +179,7 @@ const meta = {
       description: 'Enable Ctrl/Cmd+S save shortcut',
     },
   },
-} satisfies Meta<typeof ThemedMDXEditorWithProvider>;
+} satisfies Meta<typeof ThemedEditor>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -166,7 +187,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     markdown: sampleMarkdown,
-    plugins: defaultPlugins,
     onChange: (value) => {
       console.log('Content changed:', value);
     },
@@ -177,7 +197,6 @@ export const WithSave: Story = {
   args: {
     initialValue: sampleMarkdown,
     filePath: 'example.md',
-    plugins: defaultPlugins,
     onSave: async (content, context) => {
       console.log('Saving content:', content);
       console.log('File path:', context.filePath);
@@ -194,7 +213,6 @@ export const WithSave: Story = {
 export const ReadOnly: Story = {
   args: {
     markdown: sampleMarkdown,
-    plugins: defaultPlugins,
     readOnly: true,
   },
 };
@@ -214,7 +232,6 @@ export const MinimalPlugins: Story = {
 export const NoStatusBar: Story = {
   args: {
     markdown: sampleMarkdown,
-    plugins: defaultPlugins,
     hideStatusBar: true,
   },
 };
@@ -222,7 +239,6 @@ export const NoStatusBar: Story = {
 export const CustomHeight: Story = {
   args: {
     markdown: sampleMarkdown,
-    plugins: defaultPlugins,
     containerStyle: {
       height: '400px',
     },
@@ -232,7 +248,6 @@ export const CustomHeight: Story = {
 export const EmptyState: Story = {
   args: {
     markdown: '',
-    plugins: defaultPlugins,
     filePath: 'new-document.md',
   },
 };
@@ -252,7 +267,6 @@ This document includes YAML frontmatter metadata.
 
 The frontmatter plugin allows you to edit metadata in a structured way.
 `,
-    plugins: defaultPlugins,
   },
 };
 
@@ -298,6 +312,5 @@ const names = users.map(u => u.name);
 console.log(names);
 \`\`\`
 `,
-    plugins: defaultPlugins,
   },
 };

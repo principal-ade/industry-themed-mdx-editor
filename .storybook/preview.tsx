@@ -16,7 +16,7 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <ThemeProvider>
-        <div style={{ height: '600px', padding: '20px' }}>
+        <div style={{ height: '100vh', width: '100vw', margin: 0, padding: 0 }}>
           <Story />
         </div>
       </ThemeProvider>

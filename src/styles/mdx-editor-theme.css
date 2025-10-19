@@ -1,28 +1,11 @@
 /**
  * Industry-themed MDX Editor styles
  * These CSS custom properties integrate MDXEditor with the industry-theme system
+ * Based on Radix UI theming system used by MDXEditor
+ *
+ * Note: All Radix color variables are set directly by the component
+ * This file provides additional content styling and customizations
  */
-
-.themed-mdx-editor {
-  /* MDXEditor overrides using CSS custom properties */
-  --accentColor: var(--mdx-editor-link-color, #0066cc);
-  --baseColor: var(--mdx-editor-fg, #1a1a1a);
-  --backgroundColor: var(--mdx-editor-bg, #ffffff);
-  --borderColor: var(--mdx-editor-border, #e0e0e0);
-
-  /* Typography */
-  --fontFamily: var(--mdx-editor-font-family, 'monospace');
-  --fontSize: var(--mdx-editor-font-size, 14px);
-
-  /* Code blocks */
-  --codeBlockBackground: var(--mdx-editor-code-bg, #f5f5f5);
-
-  /* Selection */
-  --selectionBackground: var(--mdx-editor-selection-bg, rgba(0, 123, 255, 0.2));
-
-  /* Toolbar */
-  --toolbarBackground: var(--mdx-editor-toolbar-bg, #f8f8f8);
-}
 
 /* MDXEditor content styling */
 .themed-mdx-editor .mdx-editor-content {
@@ -47,11 +30,45 @@
   color: var(--mdx-editor-link-color, #0066cc);
 }
 
-/* Code blocks */
-.themed-mdx-editor .mdx-editor-content pre,
+/* Inline code */
 .themed-mdx-editor .mdx-editor-content code {
   background-color: var(--mdx-editor-code-bg, #f5f5f5);
   font-family: var(--mdx-editor-font-family, 'monospace');
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* Code blocks - target the CodeMirror editor wrapper */
+.themed-mdx-editor .cm-editor {
+  background-color: var(--mdx-editor-code-bg, #f5f5f5) !important;
+}
+
+.themed-mdx-editor .cm-editor .cm-scroller {
+  font-family: var(--mdx-editor-font-family, 'monospace');
+  background-color: var(--mdx-editor-code-bg, #f5f5f5);
+}
+
+.themed-mdx-editor .cm-editor .cm-gutters {
+  background-color: var(--mdx-editor-code-bg, #f5f5f5);
+  border-right: 1px solid var(--mdx-editor-border, #e0e0e0);
+  color: var(--mdx-editor-fg, #1a1a1a);
+}
+
+.themed-mdx-editor .cm-editor .cm-content {
+  background-color: var(--mdx-editor-code-bg, #f5f5f5);
+  color: var(--mdx-editor-fg, #1a1a1a);
+}
+
+.themed-mdx-editor .cm-editor .cm-line {
+  background-color: var(--mdx-editor-code-bg, #f5f5f5);
+}
+
+.themed-mdx-editor .cm-editor .cm-activeLineGutter {
+  background-color: var(--baseBgHover, #f0f0f0);
+}
+
+.themed-mdx-editor .cm-editor .cm-activeLine {
+  background-color: var(--baseBgHover, #f0f0f0);
 }
 
 /* Selection */

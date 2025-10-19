@@ -1,5 +1,7 @@
 import { useTheme } from '@a24z/industry-theme';
 import { useCallback, useMemo } from 'react';
+import { createAutoCodeMirrorTheme } from '../utils/codeMirrorTheme';
+import type { Extension } from '@codemirror/state';
 
 /**
  * Hook that provides MDX editor theme configuration from industry-theme
@@ -50,8 +52,13 @@ export function useThemedMDXEditor() {
     } as Record<string, string>;
   }, [editorTheme]);
 
+  const getCodeMirrorExtensions = useCallback((): Extension[] => {
+    return [createAutoCodeMirrorTheme(theme)];
+  }, [theme]);
+
   return {
     theme: editorTheme,
     getCSSVariables,
+    getCodeMirrorExtensions,
   };
 }

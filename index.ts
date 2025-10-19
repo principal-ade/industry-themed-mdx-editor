@@ -14,6 +14,9 @@ export type { ThemedMDXEditorWithProviderProps } from './src/components/ThemedMD
 // Hooks
 export { useThemedMDXEditor } from './src/hooks/useThemedMDXEditor';
 
+// Utilities
+export { createCodeMirrorTheme, createAutoCodeMirrorTheme } from './src/utils/codeMirrorTheme';
+
 // Re-export types from @a24z/industry-theme for convenience
 export type { Theme } from '@a24z/industry-theme';
 

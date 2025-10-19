@@ -47,11 +47,19 @@
     "@a24z/industry-theme": "^0.1.1"
   },
   "peerDependencies": {
+    "@codemirror/state": ">=6.0.0",
+    "@codemirror/view": ">=6.0.0",
     "@mdxeditor/editor": ">=3.0.0",
     "react": ">=19.0.0",
     "react-dom": ">=19.0.0"
   },
   "peerDependenciesMeta": {
+    "@codemirror/state": {
+      "optional": true
+    },
+    "@codemirror/view": {
+      "optional": true
+    },
     "react": {
       "optional": true
     },

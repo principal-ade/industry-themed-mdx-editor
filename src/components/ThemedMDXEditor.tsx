@@ -197,22 +197,68 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [enableSaveShortcut, handleSave, onSave]);
 
-  const editorStyles = useMemo(
-    () => ({
-      '--mdx-editor-bg': theme.colors.background,
-      '--mdx-editor-fg': theme.colors.text,
-      '--mdx-editor-border': theme.colors.border,
-      '--mdx-editor-toolbar-bg': theme.colors.backgroundSecondary,
+  const editorStyles = useMemo(() => {
+    // Helper to convert hex to rgba
+    const hexToRgba = (hex: string, alpha: number): string => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      if (result) {
+        const r = parseInt(result[1], 16);
+        const g = parseInt(result[2], 16);
+        const b = parseInt(result[3], 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      }
+      return hex;
+    };
+
+    const primaryColor = theme.colors.primary || '#0066cc';
+    const textColor = theme.colors.text || '#1a1a1a';
+
+    return {
+      // Radix Accent Colors (computed from primary color with different opacities)
+      // These are used by MDXEditor's internal UI components (toolbar, dialogs, etc.)
+      '--accentBase': primaryColor,
+      '--accentBgSubtle': hexToRgba(primaryColor, 0.05),
+      '--accentBg': hexToRgba(primaryColor, 0.1),
+      '--accentBgHover': hexToRgba(primaryColor, 0.15),
+      '--accentBgActive': hexToRgba(primaryColor, 0.2),
+      '--accentLine': hexToRgba(primaryColor, 0.3),
+      '--accentBorder': hexToRgba(primaryColor, 0.4),
+      '--accentBorderHover': hexToRgba(primaryColor, 0.5),
+      '--accentSolid': primaryColor,
+      '--accentSolidHover': primaryColor,
+      '--accentText': primaryColor,
+      '--accentTextContrast': theme.colors.background || '#ffffff',
+
+      // Radix Base Colors (computed from background/text colors)
+      // These are used by MDXEditor's internal UI components (toolbar, dialogs, etc.)
+      '--baseBase': theme.colors.background || '#ffffff',
+      '--baseBgSubtle': theme.colors.backgroundSecondary || '#fafafa',
+      '--baseBg': theme.colors.background || '#ffffff',
+      '--baseBgHover': theme.colors.backgroundSecondary || '#f5f5f5',
+      '--baseBgActive': theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || '#f0f0f0',
+      '--baseLine': hexToRgba(textColor, 0.15),
+      '--baseBorder': theme.colors.border || '#e0e0e0',
+      '--baseBorderHover': hexToRgba(textColor, 0.3),
+      '--baseSolid': textColor,
+      '--baseSolidHover': textColor,
+      '--baseText': textColor,
+      '--baseTextContrast': theme.colors.background || '#ffffff',
+
+      // Our custom variables for content styling (used in mdx-editor-theme.css)
+      '--mdx-editor-bg': theme.colors.background || '#ffffff',
+      '--mdx-editor-fg': textColor,
+      '--mdx-editor-border': theme.colors.border || '#e0e0e0',
+      '--mdx-editor-toolbar-bg': theme.colors.backgroundSecondary || '#f8f8f8',
+      '--mdx-editor-code-bg': theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || '#f5f5f5',
+      '--mdx-editor-selection-bg': hexToRgba(primaryColor, 0.2),
+      '--mdx-editor-link-color': primaryColor,
+      '--mdx-editor-heading-color': textColor,
       '--mdx-editor-font-family': theme.fonts?.monospace || 'monospace',
       '--mdx-editor-font-size': `${theme.fontSizes?.[2] || 14}px`,
-      '--mdx-editor-code-bg': theme.colors.backgroundTertiary || theme.colors.backgroundSecondary,
-      '--mdx-editor-selection-bg': theme.colors.highlight || 'rgba(0, 123, 255, 0.2)',
-      '--mdx-editor-link-color': theme.colors.primary,
-      '--mdx-editor-heading-color': theme.colors.text,
+
       ...containerStyle,
-    } as React.CSSProperties),
-    [theme, containerStyle]
-  );
+    } as React.CSSProperties;
+  }, [theme, containerStyle]);
 
   if (!isMounted || isLoading) {
     const loading = loadingComponent || (
@@ -245,7 +291,7 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
         ...editorStyles,
       }}
     >
-      <div style={{ flex: 1, overflow: 'hidden' }}>
+      <div style={{ flex: 1, overflow: 'auto' }}>
         <MDXEditor
           ref={editorRef}
           markdown={currentValue}

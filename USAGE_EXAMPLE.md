@@ -8,7 +8,7 @@ Replace the existing implementation in `/Users/griever/Developer/electron-app/sr
 
 ```tsx
 import React, { useCallback } from 'react';
-import { ThemedMDXEditor } from '@principal-ade/industry-themed-mdx-editor';
+import { ThemedMDXEditor, createAutoCodeMirrorTheme } from '@principal-ade/industry-themed-mdx-editor';
 import '@mdxeditor/editor/style.css';
 import '@principal-ade/industry-themed-mdx-editor/styles.css';
 import {
@@ -150,7 +150,7 @@ export const MDXEditorPanel: React.FC<MDXEditorPanelProps> = ({
         // Table plugin
         tablePlugin(),
 
-        // Code block plugins
+        // Code block plugins with theming
         codeBlockPlugin({ defaultCodeBlockLanguage: 'javascript' }),
         codeMirrorPlugin({
           codeBlockLanguages: {
@@ -171,6 +171,8 @@ export const MDXEditorPanel: React.FC<MDXEditorPanelProps> = ({
             shell: 'Shell',
             sql: 'SQL',
           },
+          // Add themed CodeMirror extensions for proper code block theming
+          codeMirrorExtensions: [createAutoCodeMirrorTheme(theme)],
         }),
 
         // Frontmatter plugin
@@ -229,3 +231,81 @@ import '@principal-ade/industry-themed-mdx-editor/styles.css';
 - **Type-safe**: Full TypeScript support
 - **Save functionality**: Built-in save handling with dirty state tracking
 - **Flexible**: Supports both controlled and uncontrolled modes
+
+## CodeMirror Theming (NEW!)
+
+For proper code block theming that matches your industry-theme, you have three options:
+
+### Option 1: Use the hook (recommended for components)
+
+```tsx
+import { useThemedMDXEditor } from '@principal-ade/industry-themed-mdx-editor';
+
+function MyEditor() {
+  const { getCodeMirrorExtensions } = useThemedMDXEditor();
+
+  return (
+    <ThemedMDXEditorWithProvider
+      plugins={[
+        // ... other plugins
+        codeMirrorPlugin({
+          codeBlockLanguages: { /* ... */ },
+          codeMirrorExtensions: getCodeMirrorExtensions(),
+        }),
+      ]}
+    />
+  );
+}
+```
+
+### Option 2: Use the utility function directly
+
+```tsx
+import { createAutoCodeMirrorTheme } from '@principal-ade/industry-themed-mdx-editor';
+import { useTheme } from '@a24z/industry-theme';
+
+function MyEditor() {
+  const { theme } = useTheme();
+
+  return (
+    <ThemedMDXEditor
+      theme={theme}
+      plugins={[
+        // ... other plugins
+        codeMirrorPlugin({
+          codeBlockLanguages: { /* ... */ },
+          codeMirrorExtensions: [createAutoCodeMirrorTheme(theme)],
+        }),
+      ]}
+    />
+  );
+}
+```
+
+### Option 3: Manual theme creation (for advanced customization)
+
+```tsx
+import { createCodeMirrorTheme } from '@principal-ade/industry-themed-mdx-editor';
+import { useTheme } from '@a24z/industry-theme';
+
+function MyEditor() {
+  const { theme } = useTheme();
+
+  // createCodeMirrorTheme gives you more control over the dark mode setting
+  const cmTheme = createCodeMirrorTheme(theme);
+
+  return (
+    <ThemedMDXEditor
+      theme={theme}
+      plugins={[
+        codeMirrorPlugin({
+          codeBlockLanguages: { /* ... */ },
+          codeMirrorExtensions: [cmTheme],
+        }),
+      ]}
+    />
+  );
+}
+```
+
+**Note**: The `createAutoCodeMirrorTheme` function automatically detects if your theme is dark or light based on the background color luminance.
