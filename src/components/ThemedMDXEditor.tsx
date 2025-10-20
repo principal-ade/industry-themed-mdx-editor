@@ -4,6 +4,8 @@ import {
   type MDXEditorMethods,
   type MDXEditorProps,
 } from '@mdxeditor/editor';
+import '@mdxeditor/editor/style.css';
+import '../styles/mdx-editor-theme.css';
 import React, {
   useCallback,
   useEffect,
