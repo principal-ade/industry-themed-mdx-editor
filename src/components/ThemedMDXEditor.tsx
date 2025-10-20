@@ -65,6 +65,35 @@ export interface ThemedMDXEditorProps extends Omit<MDXEditorProps, 'className' |
 }
 
 /**
+ * Validates that all required theme properties are present
+ * Throws an error if any required properties are missing
+ */
+function validateTheme(theme: Theme): void {
+  const requiredColors = [
+    'primary',
+    'text',
+    'background',
+    'backgroundSecondary',
+    'border',
+  ] as const;
+
+  const missingColors: string[] = [];
+
+  for (const colorKey of requiredColors) {
+    if (!theme.colors[colorKey]) {
+      missingColors.push(`theme.colors.${colorKey}`);
+    }
+  }
+
+  if (missingColors.length > 0) {
+    throw new Error(
+      `ThemedMDXEditor: Missing required theme properties:\n  - ${missingColors.join('\n  - ')}\n\n` +
+      `Please ensure your theme object includes all required color properties.`
+    );
+  }
+}
+
+/**
  * A MDX editor component that integrates with industry-theme
  */
 export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps>((props, ref) => {
@@ -200,6 +229,9 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
   }, [enableSaveShortcut, handleSave, onSave]);
 
   const editorStyles = useMemo(() => {
+    // Validate theme on every render (will throw if invalid)
+    validateTheme(theme);
+
     // Helper to convert hex to rgba
     const hexToRgba = (hex: string, alpha: number): string => {
       const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -212,8 +244,18 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
       return hex;
     };
 
-    const primaryColor = theme.colors.primary || '#0066cc';
-    const textColor = theme.colors.text || '#1a1a1a';
+    // No fallbacks - these are guaranteed to exist after validation
+    const primaryColor = theme.colors.primary;
+    const textColor = theme.colors.text;
+    const background = theme.colors.background;
+    const backgroundSecondary = theme.colors.backgroundSecondary;
+    const border = theme.colors.border;
+
+    // Optional with computed fallback
+    const backgroundTertiary = theme.colors.backgroundTertiary || backgroundSecondary;
+
+    // Use theme border for most UI, but make table borders more visible
+    const accentColor = theme.colors.accent || textColor;
 
     return {
       // Radix Accent Colors (computed from primary color with different opacities)
@@ -229,29 +271,52 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
       '--accentSolid': primaryColor,
       '--accentSolidHover': primaryColor,
       '--accentText': primaryColor,
-      '--accentTextContrast': theme.colors.background || '#ffffff',
+      '--accentTextContrast': background,
 
       // Radix Base Colors (computed from background/text colors)
       // These are used by MDXEditor's internal UI components (toolbar, dialogs, etc.)
-      '--baseBase': theme.colors.background || '#ffffff',
-      '--baseBgSubtle': theme.colors.backgroundSecondary || '#fafafa',
-      '--baseBg': theme.colors.background || '#ffffff',
-      '--baseBgHover': theme.colors.backgroundSecondary || '#f5f5f5',
-      '--baseBgActive': theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || '#f0f0f0',
+      '--baseBase': background,
+      '--baseBgSubtle': backgroundSecondary,
+      '--baseBg': background,
+      '--baseBgHover': backgroundSecondary,
+      '--baseBgActive': backgroundTertiary,
       '--baseLine': hexToRgba(textColor, 0.15),
-      '--baseBorder': theme.colors.border || '#e0e0e0',
+      '--baseBorder': border,
       '--baseBorderHover': hexToRgba(textColor, 0.3),
       '--baseSolid': textColor,
       '--baseSolidHover': textColor,
       '--baseText': textColor,
-      '--baseTextContrast': theme.colors.background || '#ffffff',
+      '--baseTextContrast': background,
+
+      // Spacing scale - maps to theme.space array or uses defaults
+      '--spacing-0': '0px',
+      '--spacing-px': '1px',
+      '--spacing-0_5': '0.125rem',
+      '--spacing-1': `${theme.space?.[1] || 4}px`,
+      '--spacing-1_5': '0.375rem',
+      '--spacing-2': `${theme.space?.[2] || 8}px`,
+      '--spacing-2_5': '0.625rem',
+      '--spacing-3': '0.75rem',
+      '--spacing-3_5': '0.875rem',
+      '--spacing-4': `${theme.space?.[3] || 16}px`,
+      '--spacing-5': '1.25rem',
+      '--spacing-6': '1.5rem',
+      '--spacing-7': '1.75rem',
+      '--spacing-8': `${theme.space?.[4] || 32}px`,
+      '--spacing-9': '2.25rem',
+      '--spacing-10': '2.5rem',
+      '--spacing-11': '2.75rem',
+      '--spacing-12': '3rem',
+      '--spacing-14': '3.5rem',
+      '--spacing-16': `${theme.space?.[5] || 64}px`,
 
       // Our custom variables for content styling (used in mdx-editor-theme.css)
-      '--mdx-editor-bg': theme.colors.background || '#ffffff',
+      '--mdx-editor-bg': background,
       '--mdx-editor-fg': textColor,
-      '--mdx-editor-border': theme.colors.border || '#e0e0e0',
-      '--mdx-editor-toolbar-bg': theme.colors.backgroundSecondary || '#f8f8f8',
-      '--mdx-editor-code-bg': theme.colors.backgroundTertiary || theme.colors.backgroundSecondary || '#f5f5f5',
+      '--mdx-editor-border': border,
+      '--mdx-editor-table-border': accentColor,
+      '--mdx-editor-toolbar-bg': backgroundSecondary,
+      '--mdx-editor-code-bg': backgroundTertiary,
       '--mdx-editor-selection-bg': hexToRgba(primaryColor, 0.2),
       '--mdx-editor-link-color': primaryColor,
       '--mdx-editor-heading-color': textColor,
@@ -261,6 +326,33 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
       ...containerStyle,
     } as React.CSSProperties;
   }, [theme, containerStyle]);
+
+  // Apply CSS variables to document root for portaled elements (like select dropdowns)
+  useEffect(() => {
+    const root = document.documentElement;
+    const styles = editorStyles;
+
+    // Store original values to restore on unmount
+    const originalValues: Record<string, string> = {};
+
+    Object.entries(styles).forEach(([key, value]) => {
+      if (key.startsWith('--')) {
+        originalValues[key] = root.style.getPropertyValue(key);
+        root.style.setProperty(key, String(value));
+      }
+    });
+
+    return () => {
+      // Restore original values on unmount
+      Object.entries(originalValues).forEach(([key, value]) => {
+        if (value) {
+          root.style.setProperty(key, value);
+        } else {
+          root.style.removeProperty(key);
+        }
+      });
+    };
+  }, [editorStyles]);
 
   if (!isMounted || isLoading) {
     const loading = loadingComponent || (

@@ -7,11 +7,41 @@
  * This file provides additional content styling and customizations
  */
 
+/* Override MDXEditor's default CSS variables with our theme */
+.themed-mdx-editor [class*='editorRoot'] {
+  --accentBase: var(--accentBase) !important;
+  --accentBgSubtle: var(--accentBgSubtle) !important;
+  --accentBg: var(--accentBg) !important;
+  --accentBgHover: var(--accentBgHover) !important;
+  --accentBgActive: var(--accentBgActive) !important;
+  --accentLine: var(--accentLine) !important;
+  --accentBorder: var(--accentBorder) !important;
+  --accentBorderHover: var(--accentBorderHover) !important;
+  --accentSolid: var(--accentSolid) !important;
+  --accentSolidHover: var(--accentSolidHover) !important;
+  --accentText: var(--accentText) !important;
+  --accentTextContrast: var(--accentTextContrast) !important;
+
+  --basePageBg: var(--mdx-editor-bg) !important;
+  --baseBase: var(--baseBase) !important;
+  --baseBgSubtle: var(--baseBgSubtle) !important;
+  --baseBg: var(--baseBg) !important;
+  --baseBgHover: var(--baseBgHover) !important;
+  --baseBgActive: var(--baseBgActive) !important;
+  --baseLine: var(--baseLine) !important;
+  --baseBorder: var(--baseBorder) !important;
+  --baseBorderHover: var(--baseBorderHover) !important;
+  --baseSolid: var(--baseSolid) !important;
+  --baseSolidHover: var(--baseSolidHover) !important;
+  --baseText: var(--baseText) !important;
+  --baseTextContrast: var(--baseTextContrast) !important;
+}
+
 /* MDXEditor content styling */
 .themed-mdx-editor .mdx-editor-content {
-  font-family: var(--mdx-editor-font-family, 'monospace');
-  font-size: var(--mdx-editor-font-size, 14px);
-  color: var(--mdx-editor-fg, #1a1a1a);
+  font-family: var(--mdx-editor-font-family);
+  font-size: var(--mdx-editor-font-size);
+  color: var(--mdx-editor-fg);
   line-height: 1.6;
 }
 
@@ -22,81 +52,147 @@
 .themed-mdx-editor .mdx-editor-content h4,
 .themed-mdx-editor .mdx-editor-content h5,
 .themed-mdx-editor .mdx-editor-content h6 {
-  color: var(--mdx-editor-heading-color, #1a1a1a);
+  color: var(--mdx-editor-heading-color);
 }
 
 /* Links */
 .themed-mdx-editor .mdx-editor-content a {
-  color: var(--mdx-editor-link-color, #0066cc);
+  color: var(--mdx-editor-link-color);
 }
 
 /* Inline code */
 .themed-mdx-editor .mdx-editor-content code {
-  background-color: var(--mdx-editor-code-bg, #f5f5f5);
-  font-family: var(--mdx-editor-font-family, 'monospace');
+  background-color: var(--mdx-editor-code-bg);
+  font-family: var(--mdx-editor-font-family);
   padding: 2px 6px;
   border-radius: 3px;
 }
 
 /* Code blocks - target the CodeMirror editor wrapper */
 .themed-mdx-editor .cm-editor {
-  background-color: var(--mdx-editor-code-bg, #f5f5f5) !important;
+  background-color: var(--mdx-editor-code-bg) !important;
 }
 
 .themed-mdx-editor .cm-editor .cm-scroller {
-  font-family: var(--mdx-editor-font-family, 'monospace');
-  background-color: var(--mdx-editor-code-bg, #f5f5f5);
+  font-family: var(--mdx-editor-font-family);
+  background-color: var(--mdx-editor-code-bg);
 }
 
 .themed-mdx-editor .cm-editor .cm-gutters {
-  background-color: var(--mdx-editor-code-bg, #f5f5f5);
-  border-right: 1px solid var(--mdx-editor-border, #e0e0e0);
-  color: var(--mdx-editor-fg, #1a1a1a);
+  background-color: var(--mdx-editor-code-bg);
+  border-right: 1px solid var(--mdx-editor-border);
+  color: var(--mdx-editor-fg);
 }
 
 .themed-mdx-editor .cm-editor .cm-content {
-  background-color: var(--mdx-editor-code-bg, #f5f5f5);
-  color: var(--mdx-editor-fg, #1a1a1a);
+  background-color: var(--mdx-editor-code-bg);
+  color: var(--mdx-editor-fg);
 }
 
 .themed-mdx-editor .cm-editor .cm-line {
-  background-color: var(--mdx-editor-code-bg, #f5f5f5);
+  background-color: var(--mdx-editor-code-bg);
 }
 
 .themed-mdx-editor .cm-editor .cm-activeLineGutter {
-  background-color: var(--baseBgHover, #f0f0f0);
+  background-color: var(--baseBgHover);
 }
 
 .themed-mdx-editor .cm-editor .cm-activeLine {
-  background-color: var(--baseBgHover, #f0f0f0);
+  background-color: var(--baseBgHover);
 }
 
 /* Selection */
 .themed-mdx-editor .mdx-editor-content ::selection {
-  background-color: var(--mdx-editor-selection-bg, rgba(0, 123, 255, 0.2));
+  background-color: var(--mdx-editor-selection-bg);
 }
 
-/* Toolbar */
-.themed-mdx-editor [class*='toolbar'] {
-  background-color: var(--mdx-editor-toolbar-bg, #f8f8f8);
-  border-bottom: 1px solid var(--mdx-editor-border, #e0e0e0);
+/* Toolbar container */
+.themed-mdx-editor [class*='toolbarRoot'] {
+  background-color: var(--mdx-editor-toolbar-bg);
+  border-bottom: 1px solid var(--mdx-editor-border);
 }
 
 /* Toolbar buttons */
-.themed-mdx-editor [class*='toolbar'] button {
-  color: var(--mdx-editor-fg, #1a1a1a);
+.themed-mdx-editor [class*='toolbarRoot'] button:not([class*='selectTrigger']) {
+  color: var(--mdx-editor-fg);
 }
 
-.themed-mdx-editor [class*='toolbar'] button:hover {
-  background-color: var(--mdx-editor-selection-bg, rgba(0, 123, 255, 0.1));
+.themed-mdx-editor [class*='toolbarRoot'] button:not([class*='selectTrigger']):hover {
+  background-color: var(--mdx-editor-selection-bg);
+}
+
+/* Fix toolbar SVG icon colors - override MDXEditor's baseTextContrast usage */
+.themed-mdx-editor [class*='toolbarRoot'] svg {
+  color: var(--baseText) !important;
+}
+
+/* Toolbar select dropdowns (BlockTypeSelect, etc.) */
+.themed-mdx-editor button[role='combobox'][class*='selectTrigger'],
+.themed-mdx-editor [data-toolbar-item='true'][class*='selectTrigger'],
+button[role='combobox'][class*='selectTrigger'][data-toolbar-item='true'] {
+  background-color: var(--baseBg) !important;
+  color: var(--baseText) !important;
+  border: 1px solid var(--baseBorder) !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+}
+
+.themed-mdx-editor button[role='combobox'][class*='selectTrigger']:hover,
+.themed-mdx-editor [data-toolbar-item='true'][class*='selectTrigger']:hover,
+button[role='combobox'][class*='selectTrigger'][data-toolbar-item='true']:hover {
+  background-color: var(--baseBgHover) !important;
+  border-color: var(--baseBorderHover) !important;
+}
+
+.themed-mdx-editor button[class*='selectTrigger'] span,
+button[class*='selectTrigger'][data-toolbar-item='true'] span {
+  color: var(--baseText) !important;
+}
+
+.themed-mdx-editor button[class*='selectTrigger'] [class*='selectDropdownArrow'] svg,
+button[class*='selectTrigger'][data-toolbar-item='true'] [class*='selectDropdownArrow'] svg {
+  color: var(--baseText) !important;
+}
+
+/* Select dropdown content - Note: These are often portaled outside the editor */
+[class*='selectContent'] {
+  background-color: var(--baseBg) !important;
+  border: 1px solid var(--baseBorder) !important;
+  color: var(--baseText) !important;
+  z-index: 9999 !important;
+}
+
+[class*='selectItem'] {
+  color: var(--baseText) !important;
+}
+
+[class*='selectItem']:hover {
+  background-color: var(--baseBgHover) !important;
+}
+
+[class*='selectItem'][data-state='checked'] {
+  background-color: var(--accentBg) !important;
+  color: var(--accentText) !important;
+}
+
+/* Table borders - use accent color for visibility */
+.themed-mdx-editor [class*='tableEditor'] > tbody > tr > td:not([class*='toolCell']),
+.themed-mdx-editor [class*='tableEditor'] > tbody > tr > th:not([class*='toolCell']):not([data-tool-cell='true']) {
+  border: 1px solid var(--mdx-editor-table-border) !important;
+  padding: var(--spacing-1) var(--spacing-2);
+  white-space: normal;
+}
+
+.themed-mdx-editor [class*='tableEditor'] > thead > tr > th {
+  border: 1px solid var(--mdx-editor-table-border) !important;
 }
 
 /* Source mode editor */
 .themed-mdx-editor [class*='sourceEditor'] {
-  font-family: var(--mdx-editor-font-family, 'monospace');
-  font-size: var(--mdx-editor-font-size, 14px);
-  background-color: var(--mdx-editor-bg, #ffffff);
-  color: var(--mdx-editor-fg, #1a1a1a);
+  font-family: var(--mdx-editor-font-family);
+  font-size: var(--mdx-editor-font-size);
+  background-color: var(--mdx-editor-bg);
+  color: var(--mdx-editor-fg);
 }
 
 /* Scrollbars */
@@ -106,15 +202,15 @@
 }
 
 .themed-mdx-editor ::-webkit-scrollbar-track {
-  background: var(--mdx-editor-bg, #ffffff);
+  background: var(--mdx-editor-bg);
 }
 
 .themed-mdx-editor ::-webkit-scrollbar-thumb {
-  background: var(--mdx-editor-border, #e0e0e0);
+  background: var(--mdx-editor-border);
   border-radius: 6px;
 }
 
 .themed-mdx-editor ::-webkit-scrollbar-thumb:hover {
-  background: var(--mdx-editor-fg, #1a1a1a);
+  background: var(--mdx-editor-fg);
   opacity: 0.5;
 }
