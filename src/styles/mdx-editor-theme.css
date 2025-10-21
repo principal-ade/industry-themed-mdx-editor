@@ -43,6 +43,15 @@
   font-size: var(--mdx-editor-font-size);
   color: var(--mdx-editor-fg);
   line-height: 1.6;
+
+  /* Document padding - similar to Google Docs margins */
+  padding-top: var(--mdx-editor-padding-top, 0);
+  padding-right: var(--mdx-editor-padding-right, 0);
+  padding-bottom: var(--mdx-editor-padding-bottom, 0);
+  padding-left: var(--mdx-editor-padding-left, 0);
+
+  /* Ensure content is properly contained */
+  box-sizing: border-box;
 }
 
 /* Headings */

@@ -16,6 +16,25 @@ import React, {
   useImperativeHandle,
 } from 'react';
 
+/**
+ * Document padding configuration
+ * Similar to Google Docs margin settings
+ */
+export type DocumentPadding =
+  | number // Single value for all sides
+  | string // CSS value like "1in" or "2.54cm"
+  | {
+      top?: number | string;
+      right?: number | string;
+      bottom?: number | string;
+      left?: number | string;
+    }
+  | 'none'    // 0 padding
+  | 'narrow'  // 0.5in / 12.7mm
+  | 'normal'  // 1in / 25.4mm (Google Docs default)
+  | 'moderate' // 0.75in / 19.05mm
+  | 'wide';   // 2in / 50.8mm
+
 export interface ThemedMDXEditorProps extends Omit<MDXEditorProps, 'className' | 'contentEditableClassName'> {
   /**
    * Industry theme object to use for theming the editor
@@ -62,6 +81,79 @@ export interface ThemedMDXEditorProps extends Omit<MDXEditorProps, 'className' |
    * Show loading state initially
    */
   showLoadingState?: boolean;
+  /**
+   * Document padding/margin configuration
+   * Similar to Google Docs margin settings
+   *
+   * @example
+   * // Preset margins
+   * documentPadding="normal"  // 1in on all sides (Google Docs default)
+   * documentPadding="narrow"  // 0.5in on all sides
+   * documentPadding="wide"    // 2in on all sides
+   *
+   * @example
+   * // Custom uniform padding
+   * documentPadding={48}      // 48px on all sides
+   * documentPadding="1in"     // 1 inch on all sides
+   *
+   * @example
+   * // Custom per-side padding
+   * documentPadding={{ top: "1in", right: "0.75in", bottom: "1in", left: "0.75in" }}
+   */
+  documentPadding?: DocumentPadding;
+}
+
+/**
+ * Converts DocumentPadding to CSS padding values
+ */
+function getPaddingStyles(padding?: DocumentPadding): React.CSSProperties {
+  if (!padding) {
+    return {};
+  }
+
+  // Preset values (matching Google Docs)
+  const presets: Record<string, string> = {
+    none: '0',
+    narrow: '0.5in',
+    moderate: '0.75in',
+    normal: '1in',
+    wide: '2in',
+  };
+
+  if (typeof padding === 'string' && padding in presets) {
+    const value = presets[padding];
+    return {
+      paddingTop: value,
+      paddingRight: value,
+      paddingBottom: value,
+      paddingLeft: value,
+    };
+  }
+
+  if (typeof padding === 'number') {
+    return { padding: `${padding}px` };
+  }
+
+  if (typeof padding === 'string') {
+    return { padding };
+  }
+
+  // Object with individual sides
+  const styles: React.CSSProperties = {};
+  if (padding.top !== undefined) {
+    styles.paddingTop = typeof padding.top === 'number' ? `${padding.top}px` : padding.top;
+  }
+  if (padding.right !== undefined) {
+    styles.paddingRight = typeof padding.right === 'number' ? `${padding.right}px` : padding.right;
+  }
+  if (padding.bottom !== undefined) {
+    styles.paddingBottom = typeof padding.bottom === 'number' ? `${padding.bottom}px` : padding.bottom;
+  }
+  if (padding.left !== undefined) {
+    styles.paddingLeft = typeof padding.left === 'number' ? `${padding.left}px` : padding.left;
+  }
+
+  return styles;
 }
 
 /**
@@ -109,6 +201,7 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
     containerClassName = '',
     containerStyle = {},
     showLoadingState = false,
+    documentPadding,
     markdown: controlledMarkdown,
     onChange: externalOnChange,
     ...restEditorProps
@@ -257,6 +350,9 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
     // Use theme border for most UI, but make table borders more visible
     const accentColor = theme.colors.accent || textColor;
 
+    // Get document padding styles
+    const paddingStyles = getPaddingStyles(documentPadding);
+
     return {
       // Radix Accent Colors (computed from primary color with different opacities)
       // These are used by MDXEditor's internal UI components (toolbar, dialogs, etc.)
@@ -323,9 +419,15 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
       '--mdx-editor-font-family': theme.fonts?.monospace || 'monospace',
       '--mdx-editor-font-size': `${theme.fontSizes?.[2] || 14}px`,
 
+      // Document padding CSS variables
+      '--mdx-editor-padding-top': paddingStyles.paddingTop || paddingStyles.padding || '0',
+      '--mdx-editor-padding-right': paddingStyles.paddingRight || paddingStyles.padding || '0',
+      '--mdx-editor-padding-bottom': paddingStyles.paddingBottom || paddingStyles.padding || '0',
+      '--mdx-editor-padding-left': paddingStyles.paddingLeft || paddingStyles.padding || '0',
+
       ...containerStyle,
     } as React.CSSProperties;
-  }, [theme, containerStyle]);
+  }, [theme, containerStyle, documentPadding]);
 
   // Apply CSS variables to document root for portaled elements (like select dropdowns)
   useEffect(() => {

@@ -481,3 +481,67 @@ export const AllThemes: StoryObj = {
     layout: 'fullscreen',
   },
 };
+
+/**
+ * Document Padding Stories - Similar to Google Docs margins
+ */
+export const NoPadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: 'none',
+  },
+};
+
+export const NormalPadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: 'normal', // 1in on all sides (Google Docs default)
+  },
+};
+
+export const NarrowPadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: 'narrow', // 0.5in on all sides
+  },
+};
+
+export const ModeratePadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: 'moderate', // 0.75in on all sides
+  },
+};
+
+export const WidePadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: 'wide', // 2in on all sides
+  },
+};
+
+export const CustomPixelPadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: 48, // 48px on all sides
+  },
+};
+
+export const CustomCSSPadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: '2rem', // 2rem on all sides
+  },
+};
+
+export const AsymmetricPadding: Story = {
+  args: {
+    markdown: sampleMarkdown,
+    documentPadding: {
+      top: '1in',
+      right: '0.75in',
+      bottom: '1in',
+      left: '1.5in', // Wider left margin, like a book
+    },
+  },
+};

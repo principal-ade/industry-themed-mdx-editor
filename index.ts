@@ -6,7 +6,7 @@
 
 // Main components
 export { ThemedMDXEditor } from './src/components/ThemedMDXEditor';
-export type { ThemedMDXEditorProps } from './src/components/ThemedMDXEditor';
+export type { ThemedMDXEditorProps, DocumentPadding } from './src/components/ThemedMDXEditor';
 
 export { ThemedMDXEditorWithProvider } from './src/components/ThemedMDXEditorWithProvider';
 export type { ThemedMDXEditorWithProviderProps } from './src/components/ThemedMDXEditorWithProvider';
