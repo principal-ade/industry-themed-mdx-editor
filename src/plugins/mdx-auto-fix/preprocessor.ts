@@ -48,13 +48,13 @@ export const defaultPreprocessRules: PreprocessRule[] = [
 
       // Handle missing/empty language identifier
       if (!trimmedLang || trimmedLang === '') {
-        return `${indent}\`\`\`text\n`;
+        return `${indent}\`\`\`markdown\n`;
       }
 
       // Handle specific unrecognized languages
       const langLower = trimmedLang.toLowerCase();
       if (langLower === 'n/a') {
-        return `${indent}\`\`\`text\n`;
+        return `${indent}\`\`\`markdown\n`;
       }
       if (langLower === 'argdown') {
         return `${indent}\`\`\`markdown\n`; // Map argdown to markdown for better highlighting

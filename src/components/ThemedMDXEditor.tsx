@@ -251,6 +251,7 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
     if (!autoFixMDX) {
       return currentValue;
     }
+
     return preprocessMDX(currentValue, {
       preserveCodeBlocks: true,
     });

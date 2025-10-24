@@ -162,23 +162,23 @@ describe('code block language normalization', () => {
     expect(output).toContain('[Claim]: A statement');
   });
 
-  test('should normalize N/A language to text', () => {
+  test('should normalize N/A language to markdown', () => {
     const input = `\`\`\`N/A
 Some code here
 \`\`\``;
 
     const output = preprocessMDX(input);
-    expect(output).toContain('```text\n');
+    expect(output).toContain('```markdown\n');
     expect(output).toContain('Some code here');
   });
 
-  test('should normalize n/a (lowercase) to text', () => {
+  test('should normalize n/a (lowercase) to markdown', () => {
     const input = `\`\`\`n/a
 Some code here
 \`\`\``;
 
     const output = preprocessMDX(input);
-    expect(output).toContain('```text\n');
+    expect(output).toContain('```markdown\n');
     expect(output).toContain('Some code here');
   });
 
@@ -269,7 +269,7 @@ Some text without language
 \`\`\``;
 
     const output = preprocessMDX(input);
-    expect(output).toContain('```text\n');
+    expect(output).toContain('```markdown\n');
     expect(output).toContain('Some text without language');
   });
 
@@ -285,9 +285,9 @@ Block 2
 \`\`\``;
 
     const output = preprocessMDX(input);
-    const textBlocks = output.match(/```text/g);
-    expect(textBlocks).toBeDefined();
-    expect(textBlocks!.length).toBe(2);
+    const markdownBlocks = output.match(/```markdown/g);
+    expect(markdownBlocks).toBeDefined();
+    expect(markdownBlocks!.length).toBe(2);
   });
 
   test('should handle ASCII art diagrams without language', () => {
@@ -303,7 +303,7 @@ Block 2
 \`\`\``;
 
     const output = preprocessMDX(input);
-    expect(output).toContain('```text\n');
+    expect(output).toContain('```markdown\n');
     expect(output).toContain('Package 1');
   });
 
@@ -319,7 +319,7 @@ No language here
 
     const output = preprocessMDX(input);
     expect(output).toContain('```python\n');
-    expect(output).toContain('```text\n');
+    expect(output).toContain('```markdown\n');
     expect(output).toContain('def hello()');
   });
 
@@ -333,7 +333,7 @@ No language here
 More text`;
 
     const output = preprocessMDX(input);
-    expect(output).toContain('  ```text\n');
+    expect(output).toContain('  ```markdown\n');
     expect(output).toContain('Indented block');
   });
 
