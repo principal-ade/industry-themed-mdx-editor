@@ -262,6 +262,66 @@ const y: number = 2;
 
     expect(output).toContain('```argdown\n');
   });
+
+  test('should normalize code blocks with no language identifier', () => {
+    const input = `\`\`\`
+Some text without language
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```text\n');
+    expect(output).toContain('Some text without language');
+  });
+
+  test('should normalize multiple code blocks with missing languages', () => {
+    const input = `First block:
+\`\`\`
+Block 1
+\`\`\`
+
+Second block:
+\`\`\`
+Block 2
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    const textBlocks = output.match(/```text/g);
+    expect(textBlocks).toBeDefined();
+    expect(textBlocks!.length).toBe(2);
+  });
+
+  test('should handle ASCII art diagrams without language', () => {
+    const input = `\`\`\`
+┌─────────────────┐
+│ Package 1       │
+└────────┬────────┘
+         │
+         v
+┌─────────────────┐
+│ Package 2       │
+└─────────────────┘
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```text\n');
+    expect(output).toContain('Package 1');
+  });
+
+  test('should preserve python blocks while fixing empty blocks', () => {
+    const input = `\`\`\`python
+def hello():
+    print("world")
+\`\`\`
+
+\`\`\`
+No language here
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```python\n');
+    expect(output).toContain('```text\n');
+    expect(output).toContain('def hello()');
+  });
 });
 
 describe('real-world examples', () => {

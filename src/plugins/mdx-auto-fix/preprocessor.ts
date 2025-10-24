@@ -23,17 +23,46 @@ export interface PreprocessRule {
 export const defaultPreprocessRules: PreprocessRule[] = [
   {
     name: 'normalize-code-block-language',
-    description: 'Normalize unknown code block language identifiers',
-    pattern: /```(argdown|N\/A|n\/a)\n/gi,
+    description: 'Normalize unknown or missing code block language identifiers',
+    pattern: /^```([^\n`]*?)\n/gim,
     replacement: (_match, lang) => {
-      const langLower = lang.toLowerCase();
+      const trimmedLang = lang.trim();
+
+      // List of known/valid languages that should NOT be normalized
+      const knownLanguages = [
+        'javascript', 'js', 'typescript', 'ts', 'jsx', 'tsx',
+        'python', 'py', 'java', 'c', 'cpp', 'csharp', 'cs',
+        'html', 'css', 'scss', 'sass', 'less',
+        'json', 'yaml', 'yml', 'xml', 'toml',
+        'bash', 'sh', 'shell', 'powershell',
+        'sql', 'graphql', 'markdown', 'md',
+        'rust', 'go', 'ruby', 'php', 'swift',
+        'kotlin', 'dart', 'r', 'matlab',
+        'diff', 'text', 'plaintext',
+      ];
+
+      // If it's a known language, don't change it
+      if (knownLanguages.includes(trimmedLang.toLowerCase())) {
+        return _match; // Return original match unchanged
+      }
+
+      // Handle missing/empty language identifier
+      if (!trimmedLang || trimmedLang === '') {
+        return '```text\n';
+      }
+
+      // Handle specific unrecognized languages
+      const langLower = trimmedLang.toLowerCase();
       if (langLower === 'n/a') {
         return '```text\n';
       }
       if (langLower === 'argdown') {
         return '```markdown\n'; // Map argdown to markdown for better highlighting
       }
-      return '```text\n';
+
+      // For any other unrecognized language, keep it as-is
+      // (don't force to text - let the parser handle it)
+      return _match;
     },
   },
   {
@@ -160,15 +189,46 @@ export function preprocessMDX(
   const codeBlockLangRule = activeRules.find(r => r.name === 'normalize-code-block-language');
   if (codeBlockLangRule) {
     let fixCount = 0;
+    let insideCodeBlock = false; // Track if we're inside a code block
+
     if (typeof codeBlockLangRule.replacement === 'function') {
       result = result.replace(codeBlockLangRule.pattern, (...args) => {
-        fixCount++;
-        return (codeBlockLangRule.replacement as Function)(...args);
+        // Toggle state - if we're inside, this is a closing ```, skip it
+        if (insideCodeBlock) {
+          insideCodeBlock = false;
+          return args[0]; // Return original match (closing ```)
+        }
+
+        // This is an opening ```, process it
+        insideCodeBlock = true;
+        const originalMatch = args[0];
+        const replacement = (codeBlockLangRule.replacement as Function)(...args);
+
+        // Only count as a fix if we actually changed something
+        if (replacement !== originalMatch) {
+          fixCount++;
+        }
+
+        return replacement;
       });
     } else {
-      result = result.replace(codeBlockLangRule.pattern, () => {
-        fixCount++;
-        return codeBlockLangRule.replacement as string;
+      result = result.replace(codeBlockLangRule.pattern, (match) => {
+        // Toggle state - if we're inside, this is a closing ```, skip it
+        if (insideCodeBlock) {
+          insideCodeBlock = false;
+          return match; // Return original match (closing ```)
+        }
+
+        // This is an opening ```, process it
+        insideCodeBlock = true;
+        const replacement = codeBlockLangRule.replacement as string;
+
+        // Only count as a fix if we actually changed something
+        if (replacement !== match) {
+          fixCount++;
+        }
+
+        return replacement;
       });
     }
 
