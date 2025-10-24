@@ -25,6 +25,23 @@ or with bun:
 bun add @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @a24z/industry-theme
 ```
 
+## Tailwind CSS Compatibility
+
+This package is fully compatible with Tailwind CSS. The library includes built-in styles that restore default HTML rendering for editor content, which Tailwind's Preflight CSS reset normally removes.
+
+**No additional configuration is required** - the package's CSS automatically handles:
+- Heading sizes and font weights (h1-h6)
+- List styles and indentation (ul/ol)
+- Paragraph spacing
+- Blockquote styling
+- Table borders and padding
+- Code block formatting
+- Link underlines
+- Bold/italic rendering
+- Horizontal rule visibility
+
+The styles are scoped to `.themed-mdx-editor` and won't affect the rest of your application.
+
 ## Usage
 
 ### Basic Usage with Theme Provider

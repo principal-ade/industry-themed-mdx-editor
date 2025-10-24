@@ -223,3 +223,176 @@ button[class*='selectTrigger'][data-toolbar-item='true'] [class*='selectDropdown
   background: var(--mdx-editor-fg);
   opacity: 0.5;
 }
+
+/*
+ * Tailwind CSS Compatibility Styles
+ * Tailwind's Preflight resets all default HTML styles, but MDXEditor expects them.
+ * These styles restore necessary defaults for proper content rendering.
+ */
+
+/* Restore default heading styles */
+.themed-mdx-editor h1 {
+  font-size: 2em;
+  font-weight: 700;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  line-height: 1.2;
+}
+
+.themed-mdx-editor h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+  line-height: 1.3;
+}
+
+.themed-mdx-editor h3 {
+  font-size: 1.17em;
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  line-height: 1.4;
+}
+
+.themed-mdx-editor h4 {
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 1.33em;
+  margin-bottom: 1.33em;
+  line-height: 1.5;
+}
+
+.themed-mdx-editor h5 {
+  font-size: 0.83em;
+  font-weight: 600;
+  margin-top: 1.67em;
+  margin-bottom: 1.67em;
+  line-height: 1.5;
+}
+
+.themed-mdx-editor h6 {
+  font-size: 0.67em;
+  font-weight: 600;
+  margin-top: 2.33em;
+  margin-bottom: 2.33em;
+  line-height: 1.5;
+}
+
+/* Restore default paragraph spacing */
+.themed-mdx-editor p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* Restore default list styles */
+.themed-mdx-editor ul {
+  list-style-type: disc;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 2.5em;
+}
+
+.themed-mdx-editor ul ul {
+  list-style-type: circle;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.themed-mdx-editor ul ul ul {
+  list-style-type: square;
+}
+
+.themed-mdx-editor ol {
+  list-style-type: decimal;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 2.5em;
+}
+
+.themed-mdx-editor ol ol {
+  list-style-type: lower-alpha;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.themed-mdx-editor ol ol ol {
+  list-style-type: lower-roman;
+}
+
+.themed-mdx-editor li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+/* Restore default blockquote styles */
+.themed-mdx-editor blockquote {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 2.5em;
+  margin-right: 2.5em;
+  padding-left: 1em;
+  border-left: 4px solid currentColor;
+  opacity: 0.8;
+}
+
+/* Restore default code styles */
+.themed-mdx-editor code {
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.themed-mdx-editor pre {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
+  overflow: auto;
+}
+
+.themed-mdx-editor pre code {
+  font-size: inherit;
+}
+
+/* Restore default table styles */
+.themed-mdx-editor table {
+  border-collapse: collapse;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.themed-mdx-editor th,
+.themed-mdx-editor td {
+  padding: 0.5em;
+  text-align: left;
+}
+
+.themed-mdx-editor th {
+  font-weight: 600;
+}
+
+/* Restore default emphasis styles */
+.themed-mdx-editor strong,
+.themed-mdx-editor b {
+  font-weight: 700;
+}
+
+.themed-mdx-editor em,
+.themed-mdx-editor i {
+  font-style: italic;
+}
+
+/* Restore default link styles */
+.themed-mdx-editor a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Restore default hr styles */
+.themed-mdx-editor hr {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  border: 0;
+  border-top: 1px solid currentColor;
+  opacity: 0.3;
+}
