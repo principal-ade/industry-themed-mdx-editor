@@ -24,8 +24,8 @@ export const defaultPreprocessRules: PreprocessRule[] = [
   {
     name: 'normalize-code-block-language',
     description: 'Normalize unknown or missing code block language identifiers',
-    pattern: /^```([^\n`]*?)\n/gim,
-    replacement: (_match, lang) => {
+    pattern: /^(\s*)```([^\n`]*?)\n/gim,
+    replacement: (_match, indent, lang) => {
       const trimmedLang = lang.trim();
 
       // List of known/valid languages that should NOT be normalized
@@ -48,16 +48,16 @@ export const defaultPreprocessRules: PreprocessRule[] = [
 
       // Handle missing/empty language identifier
       if (!trimmedLang || trimmedLang === '') {
-        return '```text\n';
+        return `${indent}\`\`\`text\n`;
       }
 
       // Handle specific unrecognized languages
       const langLower = trimmedLang.toLowerCase();
       if (langLower === 'n/a') {
-        return '```text\n';
+        return `${indent}\`\`\`text\n`;
       }
       if (langLower === 'argdown') {
-        return '```markdown\n'; // Map argdown to markdown for better highlighting
+        return `${indent}\`\`\`markdown\n`; // Map argdown to markdown for better highlighting
       }
 
       // For any other unrecognized language, keep it as-is

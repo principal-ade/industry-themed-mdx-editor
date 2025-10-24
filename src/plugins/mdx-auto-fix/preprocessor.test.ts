@@ -322,6 +322,32 @@ No language here
     expect(output).toContain('```text\n');
     expect(output).toContain('def hello()');
   });
+
+  test('should handle indented code blocks (in lists or quotes)', () => {
+    const input = `Some text
+
+  \`\`\`
+  Indented block
+  \`\`\`
+
+More text`;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('  ```text\n');
+    expect(output).toContain('Indented block');
+  });
+
+  test('should handle indented argdown blocks', () => {
+    const input = `List item:
+
+    \`\`\`argdown
+    [Claim]: Statement
+    \`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('    ```markdown\n');
+    expect(output).toContain('[Claim]: Statement');
+  });
 });
 
 describe('real-world examples', () => {
