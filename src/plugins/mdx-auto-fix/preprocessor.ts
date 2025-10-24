@@ -22,6 +22,21 @@ export interface PreprocessRule {
  */
 export const defaultPreprocessRules: PreprocessRule[] = [
   {
+    name: 'normalize-code-block-language',
+    description: 'Normalize unknown code block language identifiers',
+    pattern: /```(argdown|N\/A|n\/a)\n/gi,
+    replacement: (_match, lang) => {
+      const langLower = lang.toLowerCase();
+      if (langLower === 'n/a') {
+        return '```text\n';
+      }
+      if (langLower === 'argdown') {
+        return '```markdown\n'; // Map argdown to markdown for better highlighting
+      }
+      return '```text\n';
+    },
+  },
+  {
     name: 'less-than-digit',
     description: 'Escape < followed by digit',
     pattern: /<(?=\d)/g,
@@ -139,19 +154,50 @@ export function preprocessMDX(
     byTransformer: {},
   };
 
-  const transform = (text: string): string => {
-    let result = text;
+  // First, normalize code block language identifiers (runs on full markdown)
+  // This must happen before preserveCode to avoid the language part being protected
+  let result = markdown;
+  const codeBlockLangRule = activeRules.find(r => r.name === 'normalize-code-block-language');
+  if (codeBlockLangRule) {
+    let fixCount = 0;
+    if (typeof codeBlockLangRule.replacement === 'function') {
+      result = result.replace(codeBlockLangRule.pattern, (...args) => {
+        fixCount++;
+        return (codeBlockLangRule.replacement as Function)(...args);
+      });
+    } else {
+      result = result.replace(codeBlockLangRule.pattern, () => {
+        fixCount++;
+        return codeBlockLangRule.replacement as string;
+      });
+    }
 
-    for (const rule of activeRules) {
+    if (fixCount > 0) {
+      stats.byTransformer[codeBlockLangRule.name] = fixCount;
+      stats.totalFixes += fixCount;
+
+      if (debug) {
+        console.log(`[mdx-auto-fix] ${codeBlockLangRule.name}: ${fixCount} fixes`);
+      }
+    }
+  }
+
+  // Then apply other transformations (excluding the code block language rule)
+  const otherRules = activeRules.filter(r => r.name !== 'normalize-code-block-language');
+
+  const transform = (text: string): string => {
+    let transformed = text;
+
+    for (const rule of otherRules) {
       let fixCount = 0;
 
       if (typeof rule.replacement === 'function') {
-        result = result.replace(rule.pattern, (...args) => {
+        transformed = transformed.replace(rule.pattern, (...args) => {
           fixCount++;
           return (rule.replacement as Function)(...args);
         });
       } else {
-        result = result.replace(rule.pattern, () => {
+        transformed = transformed.replace(rule.pattern, () => {
           fixCount++;
           return rule.replacement as string;
         });
@@ -167,12 +213,12 @@ export function preprocessMDX(
       }
     }
 
-    return result;
+    return transformed;
   };
 
-  const result = preserveCodeBlocks
-    ? preserveCode(markdown, transform)
-    : transform(markdown);
+  result = preserveCodeBlocks
+    ? preserveCode(result, transform)
+    : transform(result);
 
   if (onStats && stats.totalFixes > 0) {
     onStats(stats);

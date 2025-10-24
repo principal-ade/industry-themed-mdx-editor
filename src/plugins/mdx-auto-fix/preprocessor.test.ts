@@ -150,6 +150,120 @@ Target: <10ms`;
   });
 });
 
+describe('code block language normalization', () => {
+  test('should normalize argdown language to markdown', () => {
+    const input = `\`\`\`argdown
+[Claim]: A statement
++ <Argument>: Supporting point
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```markdown\n');
+    expect(output).toContain('[Claim]: A statement');
+  });
+
+  test('should normalize N/A language to text', () => {
+    const input = `\`\`\`N/A
+Some code here
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```text\n');
+    expect(output).toContain('Some code here');
+  });
+
+  test('should normalize n/a (lowercase) to text', () => {
+    const input = `\`\`\`n/a
+Some code here
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```text\n');
+    expect(output).toContain('Some code here');
+  });
+
+  test('should handle multiple argdown code blocks', () => {
+    const input = `# Debate
+
+\`\`\`argdown
+[Claim 1]: First claim
+\`\`\`
+
+\`\`\`argdown
+[Claim 2]: Second claim
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    const markdownBlocks = output.match(/```markdown/g);
+    expect(markdownBlocks).toBeDefined();
+    expect(markdownBlocks!.length).toBe(2);
+  });
+
+  test('should preserve known language identifiers', () => {
+    const input = `\`\`\`javascript
+const x = 1;
+\`\`\`
+
+\`\`\`typescript
+const y: number = 2;
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```javascript\n');
+    expect(output).toContain('```typescript\n');
+  });
+
+  test('should handle argdown blocks with complex content', () => {
+    const input = `\`\`\`argdown
+# Should AI Be Regulated?
+
+[AI should be regulated]: Government oversight of AI is necessary.
+
+  + <Existential Risk Argument>: AI poses risks to humanity.
+    (1) AI systems could make harmful decisions autonomously
+    (2) Without oversight, these decisions are unchecked
+    ----
+    (3) Therefore, AI should be regulated
+\`\`\``;
+
+    const output = preprocessMDX(input);
+    expect(output).toContain('```markdown\n');
+    expect(output).toContain('AI should be regulated');
+    expect(output).toContain('Existential Risk Argument');
+    expect(output).toContain('(1) AI systems');
+  });
+
+  test('should report stats for code block language fixes', () => {
+    let capturedStats: TransformerStats | undefined;
+
+    const input = `\`\`\`argdown
+[Claim]: Statement
+\`\`\``;
+
+    preprocessMDX(input, {
+      onStats: (stats) => {
+        capturedStats = stats;
+      },
+    });
+
+    expect(capturedStats).toBeDefined();
+    expect(capturedStats!.totalFixes).toBe(1);
+    expect(capturedStats!.byTransformer['normalize-code-block-language']).toBe(1);
+  });
+
+  test('should allow disabling code block language normalization', () => {
+    const input = `\`\`\`argdown
+[Claim]: Statement
+\`\`\``;
+
+    const output = preprocessMDX(input, {
+      disable: ['normalize-code-block-language'],
+    });
+
+    expect(output).toContain('```argdown\n');
+  });
+});
+
 describe('real-world examples', () => {
   test('should fix deployment options document', () => {
     const input = `**Target**:
