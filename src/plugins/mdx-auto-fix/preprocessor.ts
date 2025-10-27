@@ -166,11 +166,11 @@ export function preprocessMDX(
   // Filter rules based on enable/disable
   let activeRules = rules;
 
-  if (enable && enable.length > 0) {
+  if (Array.isArray(enable) && enable.length > 0) {
     activeRules = rules.filter(r => enable.includes(r.name));
   }
 
-  if (disable && disable.length > 0) {
+  if (Array.isArray(disable) && disable.length > 0) {
     activeRules = activeRules.filter(r => !disable.includes(r.name));
   }
 

@@ -87,11 +87,11 @@ export const mdxAutoFix: Plugin<[MDXAutoFixOptions?], Root> = (options = {}) => 
     let activeTransformers: Transformer[] = transformers.filter(t => t.defaultEnabled);
 
     // Apply enable/disable filters
-    if (enable && enable.length > 0) {
+    if (Array.isArray(enable) && enable.length > 0) {
       activeTransformers = transformers.filter(t => enable.includes(t.name));
     }
 
-    if (disable && disable.length > 0) {
+    if (Array.isArray(disable) && disable.length > 0) {
       activeTransformers = activeTransformers.filter(t => !disable.includes(t.name));
     }
 
