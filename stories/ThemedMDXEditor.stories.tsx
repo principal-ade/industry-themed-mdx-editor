@@ -129,6 +129,7 @@ function useDefaultPlugins() {
           bash: 'Bash',
           shell: 'Shell',
           sql: 'SQL',
+          mermaid: 'Mermaid',
         },
         codeMirrorExtensions: getCodeMirrorExtensions(),
       }),
@@ -367,6 +368,7 @@ const ThemeSelector = () => {
           bash: 'Bash',
           shell: 'Shell',
           sql: 'SQL',
+          mermaid: 'Mermaid',
         },
       }),
       frontmatterPlugin(),
@@ -543,5 +545,88 @@ export const AsymmetricPadding: Story = {
       bottom: '1in',
       left: '1.5in', // Wider left margin, like a book
     },
+  },
+};
+
+export const WithMermaidDiagram: Story = {
+  args: {
+    markdown: `# Mermaid Diagram Example
+
+This story demonstrates how the MDX editor handles Mermaid diagrams.
+
+## System Architecture
+
+\`\`\`mermaid
+graph TD
+    A[User] -->|Edits Content| B[MDX Editor]
+    B -->|Applies Theme| C[Theme Provider]
+    C -->|Injects CSS Variables| D[Styled Components]
+    B -->|Parses MDX| E[MDX Parser]
+    E -->|Generates AST| F[React Components]
+    F -->|Renders| G[Browser]
+    B -->|Saves| H[(File System)]
+\`\`\`
+
+## Data Flow
+
+\`\`\`mermaid
+sequenceDiagram
+    participant User
+    participant Editor
+    participant ThemeProvider
+    participant SaveHandler
+
+    User->>Editor: Types content
+    Editor->>ThemeProvider: Request theme
+    ThemeProvider-->>Editor: Apply CSS variables
+    User->>Editor: Press Ctrl/Cmd+S
+    Editor->>SaveHandler: onSave(content)
+    SaveHandler-->>Editor: Success
+    Editor-->>User: Show save confirmation
+\`\`\`
+
+## Component Hierarchy
+
+\`\`\`mermaid
+classDiagram
+    class ThemedMDXEditorWithProvider {
+        +markdown: string
+        +onSave: function
+        +plugins: Plugin[]
+        +theme: Theme
+    }
+
+    class ThemeProvider {
+        +theme: Theme
+        +children: ReactNode
+    }
+
+    class MDXEditor {
+        +markdown: string
+        +plugins: Plugin[]
+        +onChange: function
+    }
+
+    ThemedMDXEditorWithProvider --> ThemeProvider
+    ThemedMDXEditorWithProvider --> MDXEditor
+\`\`\`
+
+## State Machine
+
+\`\`\`mermaid
+stateDiagram-v2
+    [*] --> Clean
+    Clean --> Dirty: User edits
+    Dirty --> Saving: Press save
+    Saving --> Clean: Save success
+    Saving --> Error: Save failed
+    Error --> Dirty: Retry
+    Dirty --> Clean: Undo changes
+\`\`\`
+
+---
+
+**Note:** The rendering of Mermaid diagrams depends on whether the editor or your viewing environment supports the mermaid syntax.
+`,
   },
 };

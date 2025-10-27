@@ -170,6 +170,7 @@ export const MDXEditorPanel: React.FC<MDXEditorPanelProps> = ({
             bash: 'Bash',
             shell: 'Shell',
             sql: 'SQL',
+            mermaid: 'Mermaid',
           },
           // Add themed CodeMirror extensions for proper code block theming
           codeMirrorExtensions: [createAutoCodeMirrorTheme(theme)],

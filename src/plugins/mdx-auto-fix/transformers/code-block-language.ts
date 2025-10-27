@@ -35,6 +35,7 @@ const KNOWN_LANGUAGES = new Set([
   'rust', 'go', 'ruby', 'php', 'swift',
   'kotlin', 'dart', 'r', 'matlab',
   'diff', 'text', 'plaintext',
+  'mermaid', // For mermaid diagram syntax
 ]);
 
 /**
