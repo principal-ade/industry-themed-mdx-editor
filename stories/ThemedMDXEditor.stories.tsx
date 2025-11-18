@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ThemedMDXEditorWithProvider } from '../src/components/ThemedMDXEditorWithProvider';
-import { ThemeProvider } from '@a24z/industry-theme';
+import { ThemeProvider } from '@principal-ade/industry-theme';
 import {
   defaultMarkdownTheme,
   defaultTerminalTheme,
   defaultEditorTheme,
-} from '@a24z/industry-theme';
+} from '@principal-ade/industry-theme';
 import {
   headingsPlugin,
   listsPlugin,

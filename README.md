@@ -4,7 +4,7 @@ Industry-themed MDX editor wrapper with integrated theming support for `@mdxedit
 
 ## Features
 
-- Seamless integration with `@a24z/industry-theme`
+- Seamless integration with `@principal-ade/industry-theme`
 - Automatic theme synchronization with MDXEditor
 - Built-in save functionality with dirty state tracking
 - Support for controlled and uncontrolled modes
@@ -16,13 +16,13 @@ Industry-themed MDX editor wrapper with integrated theming support for `@mdxedit
 ## Installation
 
 ```bash
-npm install @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @a24z/industry-theme
+npm install @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @principal-ade/industry-theme
 ```
 
 or with bun:
 
 ```bash
-bun add @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @a24z/industry-theme
+bun add @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @principal-ade/industry-theme
 ```
 
 ## Tailwind CSS Compatibility
@@ -68,7 +68,7 @@ function App() {
 
 ```tsx
 import { ThemedMDXEditor } from '@principal-ade/industry-themed-mdx-editor';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 import '@mdxeditor/editor/style.css';
 import '@principal-ade/industry-themed-mdx-editor/styles.css';
 
@@ -92,7 +92,7 @@ function Editor() {
 
 ```tsx
 import { ThemedMDXEditor } from '@principal-ade/industry-themed-mdx-editor';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 import {
   headingsPlugin,
   listsPlugin,

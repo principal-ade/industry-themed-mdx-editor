@@ -4,7 +4,7 @@
 
 Welcome to the **Industry-Themed MDX Editor** Storybook!
 
-This package provides a beautifully themed MDX editor that seamlessly integrates with the `@a24z/industry-theme` system.
+This package provides a beautifully themed MDX editor that seamlessly integrates with the `@principal-ade/industry-theme` system.
 
 ## Features
 
@@ -23,7 +23,7 @@ The main component that requires an explicit `theme` prop.
 
 ```tsx
 import { ThemedMDXEditor } from '@principal-ade/industry-themed-mdx-editor';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 
 function MyEditor() {
   const { theme } = useTheme();
@@ -44,7 +44,7 @@ Automatically uses the theme from context (requires `ThemeProvider`).
 
 ```tsx
 import { ThemedMDXEditorWithProvider } from '@principal-ade/industry-themed-mdx-editor';
-import { ThemeProvider } from '@a24z/industry-theme';
+import { ThemeProvider } from '@principal-ade/industry-theme';
 
 function App() {
   return (
@@ -61,7 +61,7 @@ function App() {
 ## Installation
 
 ```bash
-npm install @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @a24z/industry-theme
+npm install @principal-ade/industry-themed-mdx-editor @mdxeditor/editor @principal-ade/industry-theme
 ```
 
 ## CSS Imports
@@ -102,4 +102,4 @@ The editor uses CSS custom properties for theming:
 ## Learn More
 
 - [MDXEditor Documentation](https://mdxeditor.dev/)
-- [Industry Theme Documentation](https://github.com/a24z-ai/industry-theme)
+- [Industry Theme Documentation](https://github.com/principal-ade/industry-theme)

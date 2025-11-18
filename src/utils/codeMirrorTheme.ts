@@ -1,6 +1,6 @@
 import type { Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import type { Theme } from '@a24z/industry-theme';
+import type { Theme } from '@principal-ade/industry-theme';
 
 /**
  * Creates a CodeMirror theme extension based on an industry-theme Theme object

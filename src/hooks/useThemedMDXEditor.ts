@@ -1,4 +1,4 @@
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 import { useCallback, useMemo } from 'react';
 import { createAutoCodeMirrorTheme } from '../utils/codeMirrorTheme';
 import type { Extension } from '@codemirror/state';

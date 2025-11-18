@@ -37,7 +37,7 @@ import {
   BlockTypeSelect,
   DiffSourceToggleWrapper,
 } from '@mdxeditor/editor';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 import { useRepositoryPanelContext } from '../RepositoryPanelProvider';
 import { FileSystemService } from '../../main-process-api/FileSystemService';
 
@@ -263,7 +263,7 @@ function MyEditor() {
 
 ```tsx
 import { createAutoCodeMirrorTheme } from '@principal-ade/industry-themed-mdx-editor';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 
 function MyEditor() {
   const { theme } = useTheme();
@@ -287,7 +287,7 @@ function MyEditor() {
 
 ```tsx
 import { createCodeMirrorTheme } from '@principal-ade/industry-themed-mdx-editor';
-import { useTheme } from '@a24z/industry-theme';
+import { useTheme } from '@principal-ade/industry-theme';
 
 function MyEditor() {
   const { theme } = useTheme();
