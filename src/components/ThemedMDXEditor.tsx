@@ -217,7 +217,7 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
     containerClassName = '',
     containerStyle = {},
     showLoadingState = false,
-    documentPadding,
+    documentPadding = { top: '0.25in', right: '0.5in', bottom: '0.5in', left: '0.5in' },
     autoFixMDX = true,
     markdown: controlledMarkdown,
     onChange: externalOnChange,
