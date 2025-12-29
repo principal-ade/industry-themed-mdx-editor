@@ -1,0 +1,35 @@
+{
+  "name": "project",
+  "dependencies": {
+    "tessl/npm-esbuild": {
+      "version": "0.25.0"
+    },
+    "tessl/npm-eslint": {
+      "version": "9.34.0"
+    },
+    "tessl/npm-eslint-config-prettier": {
+      "version": "10.1.0"
+    },
+    "tessl/npm-eslint-import-resolver-typescript": {
+      "version": "4.4.0"
+    },
+    "tessl/npm-eslint-plugin-import": {
+      "version": "2.32.0"
+    },
+    "tessl/npm-prettier": {
+      "version": "3.6.0"
+    },
+    "tessl/npm-react-dom": {
+      "version": "19.2.0"
+    },
+    "tessl/npm-remark": {
+      "version": "15.0.0"
+    },
+    "tessl/npm-storybook": {
+      "version": "9.1.0"
+    },
+    "tessl/npm-typescript": {
+      "version": "5.9.0"
+    }
+  }
+}
