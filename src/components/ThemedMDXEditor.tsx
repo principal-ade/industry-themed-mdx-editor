@@ -3,10 +3,9 @@ import {
   MDXEditor,
   type MDXEditorMethods,
   type MDXEditorProps,
-} from '@mdxeditor/editor';
-import '@mdxeditor/editor/style.css';
+} from '@principal-ai/mdx-editor';
+import '@principal-ai/mdx-editor/style.css';
 import '../styles/mdx-editor-theme.css';
-import { preprocessMDX } from '../plugins/mdx-auto-fix';
 import React, {
   useCallback,
   useEffect,
@@ -102,21 +101,6 @@ export interface ThemedMDXEditorProps extends Omit<MDXEditorProps, 'className' |
    * documentPadding={{ top: "1in", right: "0.75in", bottom: "1in", left: "0.75in" }}
    */
   documentPadding?: DocumentPadding;
-  /**
-   * Automatically fix common MDX parsing issues
-   * Fixes patterns like "<5 minutes", ">90%", etc. that cause parsing errors
-   *
-   * @default true
-   *
-   * @example
-   * // Enable auto-fixing (default)
-   * autoFixMDX={true}
-   *
-   * @example
-   * // Disable auto-fixing
-   * autoFixMDX={false}
-   */
-  autoFixMDX?: boolean;
 }
 
 /**
@@ -218,7 +202,6 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
     containerStyle = {},
     showLoadingState = false,
     documentPadding = { top: '0.25in', right: '0.5in', bottom: '0.5in', left: '0.5in' },
-    autoFixMDX = true,
     markdown: controlledMarkdown,
     onChange: externalOnChange,
     ...restEditorProps
@@ -245,17 +228,6 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
   const currentValue = isControlled
     ? (controlledMarkdown as string | undefined) ?? ''
     : internalValue;
-
-  // Apply MDX auto-fix preprocessing if enabled
-  const processedMarkdown = useMemo(() => {
-    if (!autoFixMDX) {
-      return currentValue;
-    }
-
-    return preprocessMDX(currentValue, {
-      preserveCodeBlocks: true,
-    });
-  }, [currentValue, autoFixMDX]);
 
   // Handle client-side only rendering (MDXEditor doesn't support SSR)
   useEffect(() => {
@@ -518,7 +490,7 @@ export const ThemedMDXEditor = forwardRef<MDXEditorMethods, ThemedMDXEditorProps
       <div style={{ flex: 1, overflow: 'auto' }}>
         <MDXEditor
           ref={editorRef}
-          markdown={processedMarkdown}
+          markdown={currentValue}
           onChange={handleChange}
           contentEditableClassName="mdx-editor-content"
           {...restEditorProps}

@@ -1,0 +1,14 @@
+/* Ensure fullscreen stories fill the Storybook iframe properly */
+html,
+body,
+#storybook-root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* For fullscreen layout stories */
+.sb-show-main.sb-main-padded {
+  padding: 0 !important;
+}
