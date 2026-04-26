@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Preview } from '@storybook/react-vite';
 import { ThemeProvider } from '@principal-ade/industry-theme';
-import '@mdxeditor/editor/style.css';
+import '@principal-ai/mdx-editor/style.css';
 import '../src/styles/mdx-editor-theme.css';
 import './preview.css';
 

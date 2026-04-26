@@ -31,7 +31,7 @@ import {
   ListsToggle,
   BlockTypeSelect,
   DiffSourceToggleWrapper,
-} from '@mdxeditor/editor';
+} from '@principal-ai/mdx-editor';
 import React from 'react';
 import { useThemedMDXEditor } from '../src/hooks/useThemedMDXEditor';
 
@@ -110,7 +110,7 @@ function useDefaultPlugins() {
         imageUploadHandler: async () => 'https://via.placeholder.com/400x300',
       }),
       tablePlugin(),
-      codeBlockPlugin({ defaultCodeBlockLanguage: 'javascript' }),
+      codeBlockPlugin({ defaultCodeBlockLanguage: '' }),
       codeMirrorPlugin({
         codeBlockLanguages: {
           javascript: 'JavaScript',
@@ -349,7 +349,7 @@ const ThemeSelector = () => {
         imageUploadHandler: async () => 'https://via.placeholder.com/400x300',
       }),
       tablePlugin(),
-      codeBlockPlugin({ defaultCodeBlockLanguage: 'javascript' }),
+      codeBlockPlugin({ defaultCodeBlockLanguage: '' }),
       codeMirrorPlugin({
         codeBlockLanguages: {
           javascript: 'JavaScript',
@@ -627,6 +627,177 @@ stateDiagram-v2
 ---
 
 **Note:** The rendering of Mermaid diagrams depends on whether the editor or your viewing environment supports the mermaid syntax.
+`,
+  },
+};
+
+export const MermaidDiagramsTest: Story = {
+  args: {
+    markdown: `# Mermaid Diagrams Test
+
+Mermaid allows you to create diagrams and visualizations using text.
+
+## Flowchart
+
+\`\`\`mermaid
+graph TD
+    A[User Opens App] -->|Clicks Button| B{Is Authenticated?}
+    B -->|Yes| C[Show Dashboard]
+    B -->|No| D[Show Login Screen]
+    D -->|Login Success| C
+    D -->|Login Failed| E[Show Error]
+    E -->|Retry| D
+    C -->|Logout| D
+\`\`\`
+
+## Sequence Diagram
+
+\`\`\`mermaid
+sequenceDiagram
+    participant User
+    participant Browser
+    participant Server
+    participant Database
+
+    User->>Browser: Enter credentials
+    Browser->>Server: POST /api/login
+    Server->>Database: Query user
+    Database-->>Server: User data
+    Server-->>Browser: JWT token
+    Browser-->>User: Redirect to dashboard
+\`\`\`
+
+## Class Diagram
+
+\`\`\`mermaid
+classDiagram
+    class User {
+        +String name
+        +String email
+        +String id
+        +login()
+        +logout()
+    }
+
+    class Post {
+        +String title
+        +String content
+        +Date createdAt
+        +User author
+        +publish()
+        +delete()
+    }
+
+    class Comment {
+        +String text
+        +User author
+        +Post post
+        +create()
+        +delete()
+    }
+
+    User "1" --> "*" Post : creates
+    Post "1" --> "*" Comment : has
+    User "1" --> "*" Comment : writes
+\`\`\`
+
+## State Diagram
+
+\`\`\`mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Loading : Start Request
+    Loading --> Success : Data Received
+    Loading --> Error : Request Failed
+    Success --> Idle : Reset
+    Error --> Idle : Reset
+    Error --> Loading : Retry
+    Success --> [*]
+\`\`\`
+
+## Entity Relationship Diagram
+
+\`\`\`mermaid
+erDiagram
+    USER ||--o{ POST : creates
+    USER ||--o{ COMMENT : writes
+    POST ||--o{ COMMENT : has
+
+    USER {
+        int id PK
+        string name
+        string email
+        datetime created_at
+    }
+
+    POST {
+        int id PK
+        int user_id FK
+        string title
+        text content
+        datetime published_at
+    }
+
+    COMMENT {
+        int id PK
+        int user_id FK
+        int post_id FK
+        text content
+        datetime created_at
+    }
+\`\`\`
+
+## Gantt Chart
+
+\`\`\`mermaid
+gantt
+    title Project Timeline
+    dateFormat  YYYY-MM-DD
+    section Planning
+    Requirements gathering :done, req, 2024-01-01, 2024-01-15
+    Design mockups        :done, design, 2024-01-10, 2024-01-25
+
+    section Development
+    Backend API           :active, backend, 2024-01-20, 2024-02-20
+    Frontend UI           :frontend, 2024-02-01, 2024-03-01
+    Testing              :test, 2024-02-20, 2024-03-10
+
+    section Deployment
+    Staging deployment   :staging, 2024-03-05, 2024-03-12
+    Production release   :prod, 2024-03-12, 2024-03-15
+\`\`\`
+
+## Pie Chart
+
+\`\`\`mermaid
+pie title Programming Languages Used
+    "JavaScript" : 35
+    "TypeScript" : 30
+    "Python" : 20
+    "Go" : 10
+    "Rust" : 5
+\`\`\`
+
+## Git Graph
+
+\`\`\`mermaid
+gitGraph
+    commit id: "Initial commit"
+    commit id: "Add authentication"
+    branch feature/dashboard
+    checkout feature/dashboard
+    commit id: "Create dashboard layout"
+    commit id: "Add widgets"
+    checkout main
+    merge feature/dashboard
+    commit id: "Release v1.0"
+    branch hotfix/login-bug
+    checkout hotfix/login-bug
+    commit id: "Fix login redirect"
+    checkout main
+    merge hotfix/login-bug
+    commit id: "Release v1.0.1"
+\`\`\`
 `,
   },
 };
