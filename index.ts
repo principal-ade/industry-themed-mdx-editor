@@ -14,6 +14,22 @@ export type { ThemedMDXEditorWithProviderProps } from './src/components/ThemedMD
 // Hooks
 export { useThemedMDXEditor } from './src/hooks/useThemedMDXEditor';
 
+// Vim bindings for the CodeMirror surfaces (source view + code blocks),
+// with runtime toggle + view-mode/vim change notifications for persistence.
+export {
+  useVimCompartment,
+  vimExtension,
+  setVimEnabled,
+  VimToggle,
+  ViewModeReporter,
+  viewMode$,
+} from './src/vim';
+export type {
+  VimToggleProps,
+  ViewModeReporterProps,
+  ViewMode,
+} from './src/vim';
+
 // Utilities
 export { createCodeMirrorTheme, createAutoCodeMirrorTheme } from './src/utils/codeMirrorTheme';
 
